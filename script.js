@@ -43,7 +43,7 @@ function addFilmToLibrary() {
     myLibrary.push(newFilm);
 }
 
-// function createFilmCard
+function createFilmCard;
 
 submitBtn.addEventListener('click', addFilmToLibrary)
 
