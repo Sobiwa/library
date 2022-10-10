@@ -1,4 +1,5 @@
 let myLibrary = [];
+const libraryDisplay = document.querySelector('.library');
 const addButton = document.querySelector('.add');
 const inputForm = document.querySelector('.form-pop');
 const seenCheckbox = document.querySelector("#seen");
@@ -21,9 +22,9 @@ function film(title, director, genre, seen, rating) {
     this.rating = rating
 }
 
-film.prototype.info = function () {
-    return `${this.title} directed by ${this.director}, ${runtime} minutes, ${watched}`
-}
+// film.prototype.info = function () {
+//     return `${this.title} directed by ${this.director}, ${runtime} minutes, ${watched}`
+// }
 
 function addFilmToLibrary() {
     let title = titleInput.value;
@@ -43,9 +44,30 @@ function addFilmToLibrary() {
     myLibrary.push(newFilm);
 }
 
-function createFilmCard;
+function createFilmCards() {
+    let filmCard = [];
+    for(i = 0; i < myLibrary.length; i++) {
+        filmCard[i] = document.createElement("div");
+        filmCard[i].classList.add('film-card')
+        // filmCard[i].textContent = '';
+        for (const property in myLibrary[i]) {
+            if (myLibrary[i][property]) {
+            let p1 = document.createElement('p');
+            let p2 = document.createElement('p');
+            p1.textContent = `${property}:`;
+            p2.textContent = `${myLibrary[i][property]}`;
+            filmCard[i].appendChild(p1);
+            filmCard[i].appendChild(p2);
+            }
+        }
+        libraryDisplay.appendChild(filmCard[i]);
+    }
+}
 
-submitBtn.addEventListener('click', addFilmToLibrary)
+submitBtn.addEventListener('click', () => {
+    addFilmToLibrary();
+    createFilmCards();
+})
 
 addButton.addEventListener('click', () => {
     inputForm.classList.toggle('hide');
