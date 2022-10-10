@@ -1,0 +1,141 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body {
+    display: grid;
+    grid-template: 1fr 5fr / 1fr 5fr;
+    height: 100vh;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.sidebar {
+    grid-area: 1 / 1 / -1 / 2;
+    background-color: hsl(217, 33%, 10%);
+    color: hsl(350, 49%, 62%);
+    padding: 16px;
+}
+
+.header {
+    grid-area: 1 / 2 / 2 / -1;
+    background-color: hsl(217, 33%, 15%);
+}
+
+.library {
+    grid-area: 2 / 2 / -1 / -1;
+    background-color: #1e293b;
+}
+
+.add {
+    background-color: hsl(217, 33%, 50%);
+    width: 150px;
+    height: 200px;
+    border-radius: 20px;
+    margin: 10px;
+    color: white;
+    font-size: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add:hover {
+    transform: translate(-1px, -2px) scale(1.02);
+    box-shadow: 1px 2px 3px black;
+}
+
+.add:active {
+    transform: translate(0px, 0px);
+    box-shadow: none;
+}
+
+.form-pop {
+    background-color: hsl(217, 33%, 75%);
+    border-radius: 20px;
+    height: 400px;
+    width: 350px;
+    position: absolute;
+    margin: auto;
+    inset: 0;
+    transform-origin: center;
+    transform: scale(1);
+    transition: all 0.1s ease-in;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 4px hsl(217, 33%, 10%);
+}
+
+.rating {
+    appearance: none;
+    border: none;
+    transform-origin: left;
+    transform: scale(1);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.hide {
+    transform: scale(0);
+    transform-origin: center;
+}
+
+.form-pop form input[type="text"] {
+    appearance: none;
+    border: none;
+    border-radius: 8px;
+    width: 200px;
+    margin-right: 10px;
+    line-height: 1.5rem;
+    padding-left: 8px;
+    font-size: 100%;
+    font-family: inherit;
+}
+
+.form-pop form input:focus,
+.form-pop button:focus {
+    outline: none;
+    box-shadow: inset 0px 0px 3px hsl(217, 33%, 10%);
+}
+
+.form-pop form ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.form-pop form li {
+    display: flex;
+    flex-direction: column;
+}
+
+.rating,
+#seen {
+    margin-top: 10px;
+}
+
+.form-pop button {
+    appearance: none;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-family: inherit;
+    background-color: hsl(217, 33%, 80%);
+    font-weight:550;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.form-pop button:hover {
+    background-color: hsl(217, 33%, 90%);
+}
+
+.form-pop button:active {
+    transform: scale(0.95)
+}
+
+.btns {
+    display: flex;
+    justify-content: space-around;
+}
+

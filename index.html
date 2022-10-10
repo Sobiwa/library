@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+    <script src="script.js" defer></script>
+    <title>library</title>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>film library</h1>
+    </div>
+    <div class="header"></div>
+    <div class="library">
+        <div class="add"><span class="mdi mdi-card-plus-outline"></span></div>
+    </div>
+    <div class="form-pop hide">
+        <form>
+            <ul>
+                <li>
+                    <label for="title">title</label>
+                    <input type="text" id="title" name="title" required>
+                </li>
+                <li>
+                    <label for="director">director</label>
+                    <input type="text" id="director" name="director">
+                </li>
+                <li>
+                    <label for="genre">genre</label>
+                    <input type="text" id="genre" name="genre">
+                </li>
+            </ul>
+            <label for="seen">seen?</label>
+            <input type="checkbox" name="seen" id="seen" value="yes">
+            <fieldset class="rating hide">
+                <legend>rating</legend>
+                <label for="one">1</label>
+                <input type="radio" id="one" name="score" value="1">
+                <label for="two">2</label>
+                <input type="radio" id="two" name="score" value="2">
+                <label for="three">3</label>
+                <input type="radio" id="three" name="score" value="3">
+                <label for="four">4</label>
+                <input type="radio" id="four" name="score" value="4">
+                <label for="five">5</label>
+                <input type="radio" id ="five" name="score" value="5">
+            </fieldset>
+            <div class="btns">
+                <button type="button" class="submitBtn">submit</button>
+                <button type="button" class="cancel">cancel</button>
+            </div>
+
+
+
+        </form>
+    </div>
+</body>
+</html>
