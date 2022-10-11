@@ -48,8 +48,8 @@ function createFilmCards() {
     let filmCard = [];
     for(i = 0; i < myLibrary.length; i++) {
         filmCard[i] = document.createElement("div");
-        filmCard[i].classList.add('film-card')
-        // filmCard[i].textContent = '';
+        filmCard[i].classList.add('film-card');
+        filmCard[i].setAttribute("data-arrayIdentifier", `${i}`);
         for (const property in myLibrary[i]) {
             if (myLibrary[i][property]) {
                 if (property === "seen"){
@@ -65,11 +65,22 @@ function createFilmCards() {
                     }
                     filmCard[i].appendChild(seenCheckLabel);
                     seenCheckLabel.appendChild(seenCheck);
-                } else {
+                } else if (property === 'rating') {
+                    let starContainer = document.createElement('div');
+                    starContainer.classList.add("star-container");
+                    let howManyStars = myLibrary[i][property];
+                    for (p = 0; p < howManyStars; p++) {
+                        let star = document.createElement('span');
+                        star.classList.add('mdi', "mdi-star");
+                        starContainer.appendChild(star);
+                    }
+                    filmCard[i].appendChild(starContainer);
+                }
+                else {
             let pContainer = document.createElement('div');
             let p1 = document.createElement('p');
             let p2 = document.createElement('p');
-            p1.textContent = `${property}:`;
+            p1.textContent = `${property}`;
             p2.textContent = `${myLibrary[i][property]}`;
             pContainer.appendChild(p1);
             pContainer.appendChild(p2);
@@ -77,8 +88,21 @@ function createFilmCards() {
                 }
             }
         }
+        let exit = document.createElement('div');
+        exit.classList.add('exit', 'mdi', 'mdi-delete');
+        exit.setAttribute("data-arrayIdentifier", `${i}`);
+        filmCard[i].appendChild(exit);
         libraryDisplay.appendChild(filmCard[i]);
     }
+    const deleteBtns = document.querySelectorAll('.exit');
+    deleteBtns.forEach(deleteBtn => {
+    const arrayPosition = deleteBtn.getAttribute("data-arrayIdentifier");
+    deleteBtn.addEventListener('click', () => {
+        myLibrary.splice(arrayPosition, 1);
+        refreshFilmCards();
+        createFilmCards();
+    })
+})
 }
 
 function refreshFilmCards() {
