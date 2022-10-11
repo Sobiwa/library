@@ -2,6 +2,7 @@ let myLibrary = [];
 const libraryDisplay = document.querySelector('.library');
 const addButton = document.querySelector('.add');
 const inputForm = document.querySelector('.form-pop');
+const actualForm = document.querySelector('.actual-form')
 const seenCheckbox = document.querySelector("#seen");
 const rating = document.querySelector(".rating");
 const cancelBtn = document.querySelector(".cancel");
@@ -10,7 +11,6 @@ const submitBtn = document.querySelector(".submitBtn")
 const titleInput = document.querySelector("#title");
 const directorInput = document.querySelector("#director");
 const genreInput = document.querySelector("#genre");
-const seenInput = document.querySelector("#seen");
 // const ratingInput = document.querySelector("input[name='score']:checked").value;
 
 
@@ -32,7 +32,7 @@ function addFilmToLibrary() {
     let genre = genreInput.value;
     let seen;
     let rating;
-    if (!seenInput.checked) {
+    if (!seenCheckbox.checked) {
         seen = "no";
     } else seen = "yes";
     if (seen === 'yes') {
@@ -52,20 +52,35 @@ function createFilmCards() {
         // filmCard[i].textContent = '';
         for (const property in myLibrary[i]) {
             if (myLibrary[i][property]) {
+            let pContainer = document.createElement('div');
             let p1 = document.createElement('p');
             let p2 = document.createElement('p');
             p1.textContent = `${property}:`;
             p2.textContent = `${myLibrary[i][property]}`;
-            filmCard[i].appendChild(p1);
-            filmCard[i].appendChild(p2);
+            pContainer.appendChild(p1);
+            pContainer.appendChild(p2);
+            filmCard[i].appendChild(pContainer);
             }
         }
         libraryDisplay.appendChild(filmCard[i]);
     }
 }
 
+function refreshFilmCards() {
+    const allCards = document.querySelectorAll(".film-card");
+    allCards.forEach(card => {
+        card.remove();
+    })
+    if (seenCheckbox.checked) {
+        rating.classList.add('hide');
+    }
+    actualForm.reset();
+    inputForm.classList.add('hide');
+}
+
 submitBtn.addEventListener('click', () => {
     addFilmToLibrary();
+    refreshFilmCards();
     createFilmCards();
 })
 

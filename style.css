@@ -57,6 +57,11 @@ body {
     justify-content: center;
     padding: 16px;
     box-sizing: border-box;
+    gap: 8px;
+}
+
+.film-card div {
+    width: 100px;
 }
 
 .add:hover {
@@ -109,6 +114,7 @@ body {
     padding-left: 8px;
     font-size: 100%;
     font-family: inherit;
+    outline: none;
 }
 
 .form-pop form input:focus,
@@ -127,9 +133,79 @@ body {
     flex-direction: column;
 }
 
-.rating,
 #seen {
-    margin-top: 10px;
+    margin-top: 15px;
+    appearance: none;
+    width: 35px;
+    background-color: hsl(217, 33%, 90%);
+    height: 20px;
+    vertical-align:text-bottom;
+    border-radius: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#seen:checked {
+    background-color: hsl(217, 33%, 10%);
+}
+
+.hanger {
+    position:relative;
+    /* vertical-align: text-bottom; */
+}
+
+.hanger::after {
+    content: '';
+    height: 18px;
+    width: 18px;
+    border-radius: 30px;
+    background-color: hsl(350, 49%, 62%);
+    position: absolute;
+    bottom: 1px;
+    left: -34px;
+    transition: .3s;
+    pointer-events: none;
+}
+
+#seen:checked + .hanger::after {
+    left: -19px;
+}
+
+input[type="radio"] {
+    appearance: none;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: hsl(217, 33%, 10%);
+    vertical-align: text-bottom;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.radio-hanger {
+    position: relative;
+}
+.radio-hanger::before {
+    position: absolute;
+    content: '';
+    border-radius: 30px;
+    background-color: hsl(350, 49%, 62%);
+    width: 18px;
+    height: 18px;
+    left: -19px;
+    bottom: 1px;
+    transform: scale(0);
+    transition: .4s;
+}
+
+input[type="radio"]:checked + 
+.radio-hanger::before {
+    transform: scale(1);
+}
+
+.rating {
+    margin-top: 8px;
+    margin-bottom: 15px;
 }
 
 .form-pop button {
