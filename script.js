@@ -52,6 +52,20 @@ function createFilmCards() {
         // filmCard[i].textContent = '';
         for (const property in myLibrary[i]) {
             if (myLibrary[i][property]) {
+                if (property === "seen"){
+                    let seenCheck = document.createElement(`input`);
+                    let seenCheckLabel = document.createElement('label');
+                    seenCheckLabel.setAttribute("for", "seen-check-id");
+                    seenCheckLabel.textContent = "seen?";
+                    seenCheck.setAttribute("id", "seen-check-id");
+                    seenCheck.setAttribute("type", "checkbox")
+                    seenCheck.classList.add('seen-check');
+                    if (myLibrary[i][property] === "yes") {
+                        seenCheck.checked = true;
+                    }
+                    filmCard[i].appendChild(seenCheckLabel);
+                    seenCheckLabel.appendChild(seenCheck);
+                } else {
             let pContainer = document.createElement('div');
             let p1 = document.createElement('p');
             let p2 = document.createElement('p');
@@ -60,6 +74,7 @@ function createFilmCards() {
             pContainer.appendChild(p1);
             pContainer.appendChild(p2);
             filmCard[i].appendChild(pContainer);
+                }
             }
         }
         libraryDisplay.appendChild(filmCard[i]);

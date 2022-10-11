@@ -133,8 +133,8 @@ body {
     flex-direction: column;
 }
 
-#seen {
-    margin-top: 15px;
+.seen-check {
+    /* margin-top: 15px; */
     appearance: none;
     width: 35px;
     background-color: hsl(217, 33%, 90%);
@@ -143,18 +143,14 @@ body {
     border-radius: 10px;
     transition: 0.3s;
     cursor: pointer;
+    position: relative;
 }
 
-#seen:checked {
+.seen-check:checked {
     background-color: hsl(217, 33%, 10%);
 }
 
-.hanger {
-    position:relative;
-    /* vertical-align: text-bottom; */
-}
-
-.hanger::after {
+.seen-check::after {
     content: '';
     height: 18px;
     width: 18px;
@@ -162,13 +158,13 @@ body {
     background-color: hsl(350, 49%, 62%);
     position: absolute;
     bottom: 1px;
-    left: -34px;
+    left: 1px;
     transition: .3s;
     pointer-events: none;
 }
 
-#seen:checked + .hanger::after {
-    left: -19px;
+.seen-check:checked::after {
+    transform: translate(15px);
 }
 
 input[type="radio"] {
@@ -180,26 +176,26 @@ input[type="radio"] {
     vertical-align: text-bottom;
     border-radius: 30px;
     cursor: pointer;
+    position: relative;
 }
 
 .radio-hanger {
     position: relative;
 }
-.radio-hanger::before {
+input[type="radio"]::after {
     position: absolute;
     content: '';
     border-radius: 30px;
     background-color: hsl(350, 49%, 62%);
     width: 18px;
     height: 18px;
-    left: -19px;
+    left: 1px;
     bottom: 1px;
     transform: scale(0);
     transition: .4s;
 }
 
-input[type="radio"]:checked + 
-.radio-hanger::before {
+input[type="radio"]:checked::after {
     transform: scale(1);
 }
 
