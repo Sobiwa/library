@@ -27,7 +27,7 @@ function film(title, director, genre, seen, rating, date) {
 film.prototype.seenToggle = function () {
     if (this.seen === "yes") {
         this.seen = "no"
-        this.rating = '0';
+        this.rating = '';
         let starContainer = filmCard[this.position].querySelector('.star-container');
         starContainer.remove();
     } else {
@@ -77,14 +77,14 @@ function addFilmToLibrary() {
     let genre = genreInput.value;
     let dateAdded = Date();
     let seen;
-    let rating = '0';
+    let rating = '';
     if (!seenCheckbox.checked) {
         seen = "no";
     } else seen = "yes";
     if (seen === 'yes') {
         if (document.querySelector("input[name='score']:checked")) {
         rating = document.querySelector("input[name='score']:checked").value;
-        } else rating = '0';
+        } else rating = '';
     }
     const newFilm = new film(title, director, genre, seen, rating, dateAdded);
     myLibrary.unshift(newFilm);
