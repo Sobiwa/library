@@ -22,11 +22,28 @@ function film(title, director, genre, seen, rating) {
     this.rating = rating
 }
 
-film.prototype.seenToggle = function() {
+film.prototype.seenToggle = function () {
     if (this.seen === "yes") {
         this.seen = "no"
+        this.rating = '';
+        let starContainer = filmCard[this.position].querySelector('.star-container');
+        starContainer.remove();
     } else {
         this.seen = "yes"
+        let starContainer0 = document.createElement('div');
+        starContainer0.classList.add("star-container","selectable");
+        for (p = 0; p < 5; p++) {
+            let currentIteration = p + 1;
+            let star = document.createElement('span');
+            star.classList.add('mdi', "mdi-star-outline");
+            star.addEventListener('click', () => {
+                starContainer0.remove();
+                this.rating = currentIteration;
+                this.displayRatingAsStars();
+            })
+            starContainer0.appendChild(star);
+        }
+        filmCard[this.position].appendChild(starContainer0);
     }
 }
 
@@ -36,6 +53,17 @@ film.prototype.deleteCard = function(arrayPosition) {
         createFilmCards();
     }
 
+film.prototype.displayRatingAsStars = function() {
+    let starContainer = document.createElement('div');
+    starContainer.classList.add("star-container");
+    let howManyStars = this.rating;
+    for (p = 0; p < howManyStars; p++) {
+        let star = document.createElement('span');
+        star.classList.add('mdi', "mdi-star");
+        starContainer.appendChild(star);
+    }
+    filmCard[this.position].appendChild(starContainer);
+}
 
 // film.prototype.info = function () {
 //     return `${this.title} directed by ${this.director}, ${runtime} minutes, ${watched}`
@@ -59,15 +87,17 @@ function addFilmToLibrary() {
     myLibrary.push(newFilm);
 }
 
+let filmCard = [];
 function createFilmCards() {
-    let filmCard = [];
+    filmCard = [];
     for(i = 0; i < myLibrary.length; i++) {
+        myLibrary[i].position = `${i}`;
         let arrayPosition = i;
         filmCard[i] = document.createElement("div");
         filmCard[i].classList.add('film-card');
-        filmCard[i].setAttribute("data-arrayIdentifier", `${i}`);
+        // filmCard[i].setAttribute("data-arrayIdentifier", `${i}`);
         for (const property in myLibrary[i]) {
-            if (myLibrary[i].hasOwnProperty(property) && myLibrary[i][property]) {
+            if (myLibrary[i].hasOwnProperty(property) && myLibrary[i][property] && property !== "position") {
                 if (property === "seen"){
                     let seenCheck = document.createElement(`input`);
                     let seenCheckLabel = document.createElement('label');
@@ -75,7 +105,7 @@ function createFilmCards() {
                     seenCheckLabel.textContent = "seen?";
                     seenCheck.setAttribute("id", "seen-check-id");
                     seenCheck.setAttribute("type", "checkbox")
-                    seenCheck.setAttribute("data-arrayIdentifier", `${i}`);
+                    // seenCheck.setAttribute("data-arrayIdentifier", `${i}`);
                     seenCheck.classList.add('seen-check');
                     if (myLibrary[i][property] === "yes") {
                         seenCheck.checked = true;
@@ -86,15 +116,7 @@ function createFilmCards() {
                     filmCard[i].appendChild(seenCheckLabel);
                     seenCheckLabel.appendChild(seenCheck);
                 } else if (property === 'rating') {
-                    let starContainer = document.createElement('div');
-                    starContainer.classList.add("star-container");
-                    let howManyStars = myLibrary[i][property];
-                    for (p = 0; p < howManyStars; p++) {
-                        let star = document.createElement('span');
-                        star.classList.add('mdi', "mdi-star");
-                        starContainer.appendChild(star);
-                    }
-                    filmCard[i].appendChild(starContainer);
+                    myLibrary[arrayPosition].displayRatingAsStars();
                 }
                 else {
             let pContainer = document.createElement('div');
@@ -110,22 +132,13 @@ function createFilmCards() {
         }
         let exit = document.createElement('div');
         exit.classList.add('exit', 'mdi', 'mdi-delete');
-        exit.setAttribute("data-arrayIdentifier", `${i}`);
+        // exit.setAttribute("data-arrayIdentifier", `${i}`);
         exit.addEventListener('click', () => {
             myLibrary[arrayPosition].deleteCard(arrayPosition);
         })
         filmCard[i].appendChild(exit);
         libraryDisplay.appendChild(filmCard[i]);
     }
-//     const deleteBtns = document.querySelectorAll('.exit');
-//     deleteBtns.forEach(deleteBtn => {
-//     const arrayPosition = deleteBtn.getAttribute("data-arrayIdentifier");
-//     deleteBtn.addEventListener('click', () => {
-//         myLibrary.splice(arrayPosition, 1);
-//         refreshFilmCards();
-//         createFilmCards();
-//     })
-// })
 }
 
 function refreshFilmCards() {
