@@ -22,6 +22,7 @@ function film(title, director, genre, seen, rating) {
     this.rating = rating
 }
 
+
 // film.prototype.info = function () {
 //     return `${this.title} directed by ${this.director}, ${runtime} minutes, ${watched}`
 // }
@@ -59,6 +60,7 @@ function createFilmCards() {
                     seenCheckLabel.textContent = "seen?";
                     seenCheck.setAttribute("id", "seen-check-id");
                     seenCheck.setAttribute("type", "checkbox")
+                    seenCheck.setAttribute("data-arrayIdentifier", `${i}`);
                     seenCheck.classList.add('seen-check');
                     if (myLibrary[i][property] === "yes") {
                         seenCheck.checked = true;
@@ -102,6 +104,20 @@ function createFilmCards() {
         refreshFilmCards();
         createFilmCards();
     })
+
+    const seenCheckboxes = document.querySelectorAll("#seen-check-id");
+    seenCheckboxes.forEach(seenBox => {
+        const arrayPosition = seenBox.getAttribute("data-arrayIdentifier");
+        seenBox.addEventListener('click', () => {
+            if (seenBox.checked) {
+            myLibrary[arrayPosition].seen = "yes";
+            } else {
+                myLibrary[arrayPosition].seen = "no";
+            }
+        })
+
+    })
+
 })
 }
 
