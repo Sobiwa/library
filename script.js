@@ -22,6 +22,20 @@ function film(title, director, genre, seen, rating) {
     this.rating = rating
 }
 
+film.prototype.seenToggle = function() {
+    if (this.seen === "yes") {
+        this.seen = "no"
+    } else {
+        this.seen = "yes"
+    }
+}
+
+film.prototype.deleteCard = function(arrayPosition) {
+        myLibrary.splice(arrayPosition, 1);
+        refreshFilmCards();
+        createFilmCards();
+    }
+
 
 // film.prototype.info = function () {
 //     return `${this.title} directed by ${this.director}, ${runtime} minutes, ${watched}`
@@ -48,11 +62,12 @@ function addFilmToLibrary() {
 function createFilmCards() {
     let filmCard = [];
     for(i = 0; i < myLibrary.length; i++) {
+        let arrayPosition = i;
         filmCard[i] = document.createElement("div");
         filmCard[i].classList.add('film-card');
         filmCard[i].setAttribute("data-arrayIdentifier", `${i}`);
         for (const property in myLibrary[i]) {
-            if (myLibrary[i][property]) {
+            if (myLibrary[i].hasOwnProperty(property) && myLibrary[i][property]) {
                 if (property === "seen"){
                     let seenCheck = document.createElement(`input`);
                     let seenCheckLabel = document.createElement('label');
@@ -65,6 +80,9 @@ function createFilmCards() {
                     if (myLibrary[i][property] === "yes") {
                         seenCheck.checked = true;
                     }
+                    seenCheck.addEventListener('click', () => {
+                        myLibrary[arrayPosition].seenToggle();
+                    })
                     filmCard[i].appendChild(seenCheckLabel);
                     seenCheckLabel.appendChild(seenCheck);
                 } else if (property === 'rating') {
@@ -93,32 +111,21 @@ function createFilmCards() {
         let exit = document.createElement('div');
         exit.classList.add('exit', 'mdi', 'mdi-delete');
         exit.setAttribute("data-arrayIdentifier", `${i}`);
+        exit.addEventListener('click', () => {
+            myLibrary[arrayPosition].deleteCard(arrayPosition);
+        })
         filmCard[i].appendChild(exit);
         libraryDisplay.appendChild(filmCard[i]);
     }
-    const deleteBtns = document.querySelectorAll('.exit');
-    deleteBtns.forEach(deleteBtn => {
-    const arrayPosition = deleteBtn.getAttribute("data-arrayIdentifier");
-    deleteBtn.addEventListener('click', () => {
-        myLibrary.splice(arrayPosition, 1);
-        refreshFilmCards();
-        createFilmCards();
-    })
-
-    const seenCheckboxes = document.querySelectorAll("#seen-check-id");
-    seenCheckboxes.forEach(seenBox => {
-        const arrayPosition = seenBox.getAttribute("data-arrayIdentifier");
-        seenBox.addEventListener('click', () => {
-            if (seenBox.checked) {
-            myLibrary[arrayPosition].seen = "yes";
-            } else {
-                myLibrary[arrayPosition].seen = "no";
-            }
-        })
-
-    })
-
-})
+//     const deleteBtns = document.querySelectorAll('.exit');
+//     deleteBtns.forEach(deleteBtn => {
+//     const arrayPosition = deleteBtn.getAttribute("data-arrayIdentifier");
+//     deleteBtn.addEventListener('click', () => {
+//         myLibrary.splice(arrayPosition, 1);
+//         refreshFilmCards();
+//         createFilmCards();
+//     })
+// })
 }
 
 function refreshFilmCards() {
