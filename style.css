@@ -164,6 +164,7 @@ div.film-card > div.exit.mdi {
 .film-card:hover {
     transform: scale(1.2);
     box-shadow: 0px 0px 4px black;
+    z-index: 1;
 }
 
 .add:hover {

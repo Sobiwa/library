@@ -1,4 +1,5 @@
 let myLibrary = [];
+let sortByValue = "date";
 const libraryDisplay = document.querySelector('.library');
 const addButton = document.querySelector('.add');
 const inputForm = document.querySelector('.form-pop');
@@ -28,12 +29,12 @@ film.prototype.seenToggle = function () {
     if (this.seen === "yes") {
         this.seen = "no"
         this.rating = '';
-        let starContainer = filmCard[this.position].querySelector('.star-container');
+        let starContainer = this.card.querySelector('.star-container');
         starContainer.remove();
     } else {
         this.seen = "yes"
         let starContainer0 = document.createElement('div');
-        starContainer0.classList.add("star-container","selectable");
+        starContainer0.classList.add("star-container", "selectable");
         for (p = 0; p < 5; p++) {
             let currentIteration = p + 1;
             let star = document.createElement('span');
@@ -45,17 +46,16 @@ film.prototype.seenToggle = function () {
             })
             starContainer0.appendChild(star);
         }
-        filmCard[this.position].appendChild(starContainer0);
+        this.card.appendChild(starContainer0);
     }
 }
 
-film.prototype.deleteCard = function(arrayPosition) {
-        myLibrary.splice(arrayPosition, 1);
-        refreshFilmCards();
-        createFilmCards(myLibrary);
-    }
+film.prototype.deleteCard = function () {
+    let arrayPosition = myLibrary.indexOf(this);
+    myLibrary.splice(arrayPosition, 1);
+}
 
-film.prototype.displayRatingAsStars = function() {
+film.prototype.displayRatingAsStars = function () {
     let starContainer = document.createElement('div');
     starContainer.classList.add("star-container");
     let howManyStars = this.rating;
@@ -64,12 +64,56 @@ film.prototype.displayRatingAsStars = function() {
         star.classList.add('mdi', "mdi-star");
         starContainer.appendChild(star);
     }
-    filmCard[this.position].appendChild(starContainer);
+    this.card.appendChild(starContainer);
 }
 
-// film.prototype.info = function () {
-//     return `${this.title} directed by ${this.director}, ${runtime} minutes, ${watched}`
-// }
+film.prototype.createCard = function () {
+    this.card = document.createElement("div");
+    this.card.classList.add('film-card');
+    for (const property in this) {
+        if (this.hasOwnProperty(property) && this[property] &&
+            property !== 'date' && property !== 'card') {
+            if (property === "seen") {
+                let seenCheck = document.createElement(`input`);
+                let seenCheckLabel = document.createElement('label');
+                seenCheckLabel.setAttribute("for", "seen-check-id");
+                seenCheckLabel.textContent = "seen?";
+                seenCheck.setAttribute("id", "seen-check-id");
+                seenCheck.setAttribute("type", "checkbox")
+                seenCheck.classList.add('seen-check');
+                if (this[property] === "yes") {
+                    seenCheck.checked = true;
+                }
+                seenCheck.addEventListener('click', () => {
+                    this.seenToggle();
+                })
+                this.card.appendChild(seenCheckLabel);
+                seenCheckLabel.appendChild(seenCheck);
+            } else if (property === 'rating') {
+                this.displayRatingAsStars();
+            }
+            else {
+                let pContainer = document.createElement('div');
+                let p1 = document.createElement('p');
+                let p2 = document.createElement('p');
+                p1.textContent = `${property}`;
+                p2.textContent = `${this[property]}`;
+                pContainer.appendChild(p1);
+                pContainer.appendChild(p2);
+                this.card.appendChild(pContainer);
+            }
+        }
+    }
+    let exit = document.createElement('div');
+    exit.classList.add('exit', 'mdi', 'mdi-delete');
+    exit.addEventListener('click', () => {
+        this.deleteCard();
+        refreshFilmCards();
+        sortByAndCreate();
+    })
+    this.card.appendChild(exit);
+    libraryDisplay.appendChild(this.card);
+}
 
 function addFilmToLibrary() {
     let title = titleInput.value;
@@ -83,66 +127,23 @@ function addFilmToLibrary() {
     } else seen = "yes";
     if (seen === 'yes') {
         if (document.querySelector("input[name='score']:checked")) {
-        rating = document.querySelector("input[name='score']:checked").value;
+            rating = document.querySelector("input[name='score']:checked").value;
         } else rating = '';
     }
     const newFilm = new film(title, director, genre, seen, rating, dateAdded);
     myLibrary.unshift(newFilm);
 }
 
-let filmCard = [];
 function createFilmCards(library) {
-    filmCard = [];
-    for(i = 0; i < library.length; i++) {
-        library[i].position = `${i}`;
-        let arrayPosition = i;
-        filmCard[i] = document.createElement("div");
-        filmCard[i].classList.add('film-card');
-        // filmCard[i].setAttribute("data-arrayIdentifier", `${i}`);
-        for (const property in library[i]) {
-            if (library[i].hasOwnProperty(property) && library[i][property] && 
-            property !== "position" && property !== 'date') {
-                if (property === "seen"){
-                    let seenCheck = document.createElement(`input`);
-                    let seenCheckLabel = document.createElement('label');
-                    seenCheckLabel.setAttribute("for", "seen-check-id");
-                    seenCheckLabel.textContent = "seen?";
-                    seenCheck.setAttribute("id", "seen-check-id");
-                    seenCheck.setAttribute("type", "checkbox")
-                    // seenCheck.setAttribute("data-arrayIdentifier", `${i}`);
-                    seenCheck.classList.add('seen-check');
-                    if (library[i][property] === "yes") {
-                        seenCheck.checked = true;
-                    }
-                    seenCheck.addEventListener('click', () => {
-                        library[arrayPosition].seenToggle();
-                    })
-                    filmCard[i].appendChild(seenCheckLabel);
-                    seenCheckLabel.appendChild(seenCheck);
-                } else if (property === 'rating') {
-                    library[arrayPosition].displayRatingAsStars();
-                }
-                else {
-            let pContainer = document.createElement('div');
-            let p1 = document.createElement('p');
-            let p2 = document.createElement('p');
-            p1.textContent = `${property}`;
-            p2.textContent = `${library[i][property]}`;
-            pContainer.appendChild(p1);
-            pContainer.appendChild(p2);
-            filmCard[i].appendChild(pContainer);
-                }
-            }
-        }
-        let exit = document.createElement('div');
-        exit.classList.add('exit', 'mdi', 'mdi-delete');
-        // exit.setAttribute("data-arrayIdentifier", `${i}`);
-        exit.addEventListener('click', () => {
-            library[arrayPosition].deleteCard(arrayPosition);
-        })
-        filmCard[i].appendChild(exit);
-        libraryDisplay.appendChild(filmCard[i]);
+    for (i = 0; i < library.length; i++) {
+        library[i].createCard(); 
     }
+}
+
+function sortByAndCreate() {
+    let currentLibrary = [...myLibrary].sort((a, b) => a[sortByValue].toString().localeCompare(b[sortByValue].toString()));
+    refreshFilmCards();
+    createFilmCards(currentLibrary);
 }
 
 function refreshFilmCards() {
@@ -157,17 +158,15 @@ function refreshFilmCards() {
     inputForm.classList.add('hide');
 }
 
+
 sortBySelect.addEventListener('change', (e) => {
-    let sortByValue = e.target.value;
-    mySortedLibrary = myLibrary.sort((a,b) => a[sortByValue].toString().localeCompare(b[sortByValue].toString()));
-    refreshFilmCards();
-    createFilmCards(mySortedLibrary);
+    sortByValue = e.target.value;
+    sortByAndCreate();
 })
 
 submitBtn.addEventListener('click', () => {
     addFilmToLibrary();
-    refreshFilmCards();
-    createFilmCards(myLibrary);
+    sortByAndCreate();
 })
 
 addButton.addEventListener('click', () => {
@@ -181,7 +180,3 @@ seenCheckbox.addEventListener('click', () => {
 cancelBtn.addEventListener("click", () => {
     inputForm.classList.toggle('hide');
 })
-
-
-// const book1 = new book('The Hobbit', 'J.R.R. Tolkien', 295, 'read');
-// console.log(book1.info());
