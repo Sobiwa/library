@@ -9,6 +9,7 @@ const rating = document.querySelector(".rating");
 const cancelBtn = document.querySelector(".cancel");
 const submitBtn = document.querySelector(".submitBtn");
 const sortBySelect = document.querySelector("#sort");
+const filter = document.querySelector(".filter");
 
 const titleInput = document.querySelector("#title");
 const directorInput = document.querySelector("#director");
@@ -79,7 +80,7 @@ film.prototype.createCard = function () {
                 seenCheckLabel.setAttribute("for", "seen-check-id");
                 seenCheckLabel.textContent = "seen?";
                 seenCheck.setAttribute("id", "seen-check-id");
-                seenCheck.setAttribute("type", "checkbox")
+                seenCheck.setAttribute("type", "checkbox");
                 seenCheck.classList.add('seen-check');
                 if (this[property] === "yes") {
                     seenCheck.checked = true;
@@ -134,23 +135,57 @@ function addFilmToLibrary() {
     myLibrary.unshift(newFilm);
 }
 
+function getVariations(field, library) {
+    let variations = library.map(film => film[field])
+    .sort()
+    .reduce((a,b) => {
+        if(!a.includes(b)) {
+            a.push(b)
+        }
+        return a;
+    }, []);
+    return variations;
+}
+
+function createFilter(field, library) {
+    const title = document.createElement('h4');
+    title.innerText = field;
+    title.classList.add("remove");
+    filter.appendChild(title);
+    let filters = getVariations(field, library);
+    for (let i = 0; i < filters.length; i++) {
+        const label = document.createElement('label');
+        const check = document.createElement('input');
+        label.setAttribute("for", filters[i]);
+        label.classList.add('filter-check', 'remove');
+        label.innerText = filters[i];
+        check.setAttribute("type", "checkbox");
+        check.setAttribute("id", filters[i]);
+        label.appendChild(check);
+        filter.appendChild(label);
+    }
+}
+
 function createFilmCards(library) {
     for (i = 0; i < library.length; i++) {
-        library[i].createCard(); 
+        library[i].createCard();
     }
 }
 
 function sortByAndCreate() {
     let currentLibrary = [...myLibrary].sort((a, b) => a[sortByValue].toString().localeCompare(b[sortByValue].toString()));
     refreshFilmCards();
+    createFilter('director', currentLibrary);
     createFilmCards(currentLibrary);
 }
 
 function refreshFilmCards() {
     const allCards = document.querySelectorAll(".film-card");
+    const filters = document.querySelectorAll(".remove");
     allCards.forEach(card => {
         card.remove();
     })
+    filters.forEach(filter => filter.remove());
     if (seenCheckbox.checked) {
         rating.classList.add('hide');
     }
