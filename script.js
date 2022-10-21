@@ -110,6 +110,7 @@ film.prototype.createCard = function () {
     exit.addEventListener('click', () => {
         this.deleteCard();
         DOM.createFilmCards();
+        FILTER.createFilters();
     })
     this.card.appendChild(exit);
     libraryDisplay.appendChild(this.card);
