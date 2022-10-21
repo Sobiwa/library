@@ -16,9 +16,20 @@ body {
     background-color: hsl(217, 33%, 10%);
     color: hsl(350, 49%, 62%);
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px
+}
+
+.sidebar-title {
+    width: 100%;
+    font-size: 1.5rem;
+    font-weight:500;
+    border-bottom: 1px solid hsl(350, 49%, 62%);
 }
 
 .sidebar select {
+    margin-top: 10px;
     appearance: none;
     border: none;
     background-color: hsl(217, 33%, 50%);
@@ -35,6 +46,34 @@ body {
 
 .sidebar select:focus {
     outline: none;
+}
+
+.collapse {
+    padding: 8px 0;
+    font-weight: 600;
+}
+.collapse:hover { 
+    cursor: pointer;
+}
+
+.categories div:last-child {
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+}
+
+.categories div:last-child label {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
 }
 
 .header {
@@ -108,9 +147,7 @@ body {
 
 /* this label contains 'seen' checkbox */
 .film-card label {
-    /* width: 120px; */
     display: flex;
-    /* justify-content: flex-start; */ 
     gap: 5px;
     align-items: center;
     grid-area: 4 / 2 / 5 / -1;
@@ -236,8 +273,8 @@ div.film-card > div.exit.mdi {
     flex-direction: column;
 }
 
-.seen-check {
-    /* margin-top: 15px; */
+.seen-check,
+.sub-cat input {
     appearance: none;
     width: 35px;
     background-color: hsl(217, 33%, 90%);
@@ -249,11 +286,19 @@ div.film-card > div.exit.mdi {
     position: relative;
 }
 
-.seen-check:checked {
+.sub-cat input {
+    flex: 0 0 auto;
+    width: 20px;
+    height: 10px;
+}
+
+.seen-check:checked,
+.sub-cat input:checked {
     background-color: hsl(217, 33%, 10%);
 }
 
-.seen-check::after {
+.seen-check::after,
+.sub-cat input::after {
     content: '';
     height: 18px;
     width: 18px;
@@ -266,8 +311,20 @@ div.film-card > div.exit.mdi {
     pointer-events: none;
 }
 
-.seen-check:checked::after {
+.sub-cat input::after {
+    height: 9px;
+    width: 9px;
+    bottom: 0.5px;
+    left: 0.5px;
+}
+
+.seen-check:checked::after,
+.sub-cat input:checked::after {
     transform: translate(15px);
+}
+
+.sub-cat input:checked::after {
+    transform: translate(10px);
 }
 
 input[type="radio"] {

@@ -12,17 +12,32 @@
 <body>
     <div class="sidebar">
         <h1>film library</h1>
-        <label for="sort">sort</label>
-        <select name="sort" id="sort">
-            <option value="date">date added</option>
-            <option value="title">title</option>
-            <option value="director">director</option>
-            <option value="genre">genre</option>
-            <option value="rating">rating</option>
-        </select>
         <div>
-            <h3>filter</h3>
-            <div class="filter"></div>
+            <div class="sidebar-title">sort</div>
+            <select name="sort" id="sort">
+                <option value="date">date added</option>
+                <option value="title">title</option>
+                <option value="director">director</option>
+                <option value="genre">genre</option>
+                <option value="rating">rating</option>
+            </select>
+        </div>
+        <div>
+            <div class="sidebar-title">filter</div>
+            <div class="filter">
+                <div class="categories">
+                    <div class="sub-title collapse">director</div>
+                    <div id="director" class="sub-cat"></div>
+                </div>
+                <div class="categories">
+                    <div class="sub-title collapse">genre</div>
+                    <div id="genre" class="sub-cat"></div>
+                </div>
+                <div class="categories">
+                    <div class="sub-title collapse">rating</div>
+                    <div id="rating" class="sub-cat"></div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="header"></div>
@@ -33,16 +48,16 @@
         <form class="actual-form">
             <ul>
                 <li>
-                    <label for="title">title</label>
-                    <input type="text" id="title" name="title" required>
+                    <label for="title-input">title</label>
+                    <input type="text" id="title-input" name="title" required>
                 </li>
                 <li>
-                    <label for="director">director</label>
-                    <input type="text" id="director" name="director">
+                    <label for="director-input">director</label>
+                    <input type="text" id="director-input" name="director">
                 </li>
                 <li>
-                    <label for="genre">genre</label>
-                    <input type="text" id="genre" name="genre">
+                    <label for="genre-input">genre</label>
+                    <input type="text" id="genre-input" name="genre">
                 </li>
             </ul>
             <label for="seen">seen?</label>

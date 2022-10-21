@@ -11,9 +11,9 @@ const submitBtn = document.querySelector(".submitBtn");
 const sortBySelect = document.querySelector("#sort");
 const filter = document.querySelector(".filter");
 
-const titleInput = document.querySelector("#title");
-const directorInput = document.querySelector("#director");
-const genreInput = document.querySelector("#genre");
+const titleInput = document.querySelector("#title-input");
+const directorInput = document.querySelector("#director-input");
+const genreInput = document.querySelector("#genre-input");
 // const ratingInput = document.querySelector("input[name='score']:checked").value;
 
 
@@ -136,9 +136,17 @@ function addFilmToLibrary() {
 }
 
 function getVariations(field, library) {
-    let variations = library.map(film => film[field])
+    let variations = library.map(film => {
+        if (typeof film[field] === "string") {
+            let processed = film[field].toLowerCase();
+            return processed;
+        }
+        return film[field]})
     .sort()
     .reduce((a,b) => {
+        if(!b) {
+            b = 'n/a'
+        }
         if(!a.includes(b)) {
             a.push(b)
         }
@@ -147,13 +155,37 @@ function getVariations(field, library) {
     return variations;
 }
 
+const coll = document.getElementsByClassName("collapse");
+
+for (let i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  });
+}
+
+function refreshFilterBoxes() {
+    for(collapse of coll) {
+        const content = collapse.nextElementSibling;
+        if (content.style.maxHeight){
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+    }
+}
+
+let currentFilters = [];
 function createFilter(field, library) {
-    const title = document.createElement('h4');
-    title.innerText = field;
-    title.classList.add("remove");
-    filter.appendChild(title);
+    let allPossibleFilters = [];
     let filters = getVariations(field, library);
+    const category = document.getElementById(field);
+    let last;
     for (let i = 0; i < filters.length; i++) {
+        const identity = filters[i];
         const label = document.createElement('label');
         const check = document.createElement('input');
         label.setAttribute("for", filters[i]);
@@ -161,22 +193,81 @@ function createFilter(field, library) {
         label.innerText = filters[i];
         check.setAttribute("type", "checkbox");
         check.setAttribute("id", filters[i]);
+        check.classList.add("filterPossible");
+        if (currentFilters.includes(identity)) {
+            check.checked = true;
+        }
+        check.addEventListener("click", () => {
+            if (currentFilters.includes(identity)){
+                const spot = currentFilters.indexOf(identity);
+                currentFilters.splice(spot, 1);
+            } else currentFilters.push(identity);
+            sortByAndCreate();
+        })
+        allPossibleFilters.push(check);
         label.appendChild(check);
-        filter.appendChild(label);
+        if (filters[i] === 'n/a') {
+            last = label;
+        } else category.appendChild(label);
     }
+    if (last) {
+        category.appendChild(last);
+    }
+    return allPossibleFilters;
+}
+
+function findFilters(category) {
+    let filters = category.filter((check) => check.checked === true)
+    .reduce((a,b) => {
+        let value = b.getAttribute("id");
+        a.push(value);
+        return a;
+    }, []);
+    return filters;
 }
 
 function createFilmCards(library) {
     for (i = 0; i < library.length; i++) {
         library[i].createCard();
     }
+    refreshFilterBoxes();
 }
 
 function sortByAndCreate() {
     let currentLibrary = [...myLibrary].sort((a, b) => a[sortByValue].toString().localeCompare(b[sortByValue].toString()));
     refreshFilmCards();
-    createFilter('director', currentLibrary);
-    createFilmCards(currentLibrary);
+    const directors = createFilter('director', currentLibrary);
+    const genres = createFilter('genre', currentLibrary);
+    const ratings = createFilter('rating', currentLibrary);
+    // let filtersSelectedArray = findFilters();
+    let filteredDirectors = findFilters(directors);
+    let filteredGenres = findFilters(genres);
+    let filteredRatings = findFilters(ratings);
+    let filteredLibrary;
+    filteredLibrary = filterLibraryDisplay(filteredDirectors, currentLibrary, 'director');
+    filteredLibrary = filterLibraryDisplay(filteredGenres, filteredLibrary, "genre");
+    filteredLibrary = filterLibraryDisplay(filteredRatings, filteredLibrary, "rating");
+    createFilmCards(filteredLibrary);
+}
+
+function filterLibraryDisplay(filters, library, category) {
+    let newLib = [];
+    if (!filters.length) {
+        return library
+    } 
+    for (let i = 0; i < library.length; i++) {
+        let item = library[i][category];
+        if (item === ""){
+            item = "n/a";
+        }
+        if (typeof item === "string") {
+            item = item.toLowerCase();
+        }
+        if (filters.includes(item)) {
+            newLib.push(library[i]);
+        }
+    }
+    return newLib;
 }
 
 function refreshFilmCards() {
