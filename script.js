@@ -109,8 +109,8 @@ film.prototype.createCard = function () {
     exit.classList.add('exit', 'mdi', 'mdi-delete');
     exit.addEventListener('click', () => {
         this.deleteCard();
-        DOM.createFilmCards();
         FILTER.createFilters();
+        DOM.createFilmCards();
     })
     this.card.appendChild(exit);
     libraryDisplay.appendChild(this.card);
@@ -167,6 +167,15 @@ const FILTER = (function() {
         let filters = getVariations(field, library);
         const category = document.getElementById(field);
         let last;
+
+        //delete from currentFilters if card no longer exists//
+        for (let p = 0; p < currentFilters[field].length; p++) {
+            if (!filters.includes(currentFilters[field][p])) {
+                let position = p;
+                currentFilters[field].splice(position, 1);
+            }
+        }
+
         for (let i = 0; i < filters.length; i++) {
             const identity = filters[i];
             const label = document.createElement('label');
